@@ -1,0 +1,3 @@
+[submodule "clickhouse_plugin"]
+	path = clickhouse_plugin
+	url = https://github.com/WesleyBatista/clickhouse_plugin
