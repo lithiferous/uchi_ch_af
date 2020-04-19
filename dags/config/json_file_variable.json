@@ -1,0 +1,6 @@
+{
+	"example_variables_config": {
+		"sourcePath": "/data/",
+		"filePattern": "event-data.json"
+	}
+}
