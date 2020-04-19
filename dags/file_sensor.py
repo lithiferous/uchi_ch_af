@@ -34,26 +34,28 @@ dag = DAG(
     max_active_runs=1,
     concurrency=1)
 
-sensor_task = OmegaFileSensor(
+sensor_file = OmegaFileSensor(
     task_id=task_name,
     filepath=filepath,
     filepattern=filepattern,
     poke_interval=3,
     dag=dag)
 
-check_length = BashOperator(task_id='is_file_empty',
+check_length = BashOperator(task_id='check_length',
     bash_command="wc -l < '%s'" %filename,
     xcom_push=True,
     dag=dag)
 
 def test_callable(**context):
-    init_length = context['task_instance'].xcom_pull(key='return_value', task_ids='read_events')
-    print(init_length)
+    init_length = context['task_instance'].xcom_pull(key='return_value', task_ids='check_length')
+    print("________________")
+    if init_length == "543705":
+        raise AE(f"Cannot read empty file: {filepattern} on path: {filepath}")
 
 test_is_empty = PythonOperator(
-    task_id='is_empty_file', python_callable=test_callable, dag=dag)
+    task_id='is_file_empty', python_callable=test_callable, dag=dag)
 
 trigger = TriggerDagRunOperator(
     task_id='trigger_dag_rerun', trigger_dag_id=task_name, dag=dag)
 
-sensor_task >> check_length >> test_is_empty >> trigger
+sensor_file >> check_length >> test_is_empty >> trigger
