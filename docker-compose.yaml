@@ -16,7 +16,6 @@ services:
         image: 'redis:5.0.5'
         depends_on:
             - clickhouse
-
     postgres:
         image: postgres:9.6
         depends_on:
@@ -25,7 +24,6 @@ services:
             - POSTGRES_USER=airflow
             - POSTGRES_PASSWORD=airflow
             - POSTGRES_DB=airflow
-
     webserver:
         image: puckel/docker-airflow:1.10.9
         restart: always
@@ -91,3 +89,22 @@ services:
             - FERNET_KEY=46BKJoQYlPPOexq0OhDZnIlNepKFf87WFwLbfzqDDho=
             - EXECUTOR=Celery
         command: worker
+
+    spark-master:
+        image: bde2020/spark-master:2.4.5-hadoop2.7
+        container_name: spark-master
+        ports:
+          - "9090:9090"
+          - "7077:7077"
+        environment:
+          - "constraint:node==<yourmasternode>"
+    spark-worker:
+        image: bde2020/spark-worker:2.4.5-hadoop2.7
+        container_name: spark-worker-1
+        depends_on:
+          - spark-master
+        ports:
+          - "9091:9091"
+        environment:
+          - "SPARK_MASTER=spark://spark-master:7077"
+          - "constraint:node==<yourworkernode>"

@@ -67,10 +67,14 @@ insert_raw_data_ch = BashOperator(task_id='insert_raw_data_CH',
         curl '{clickhouse_conn}?query=INSERT+INTO+userEvents+FORMAT+JSONEachRow' --data-binary @-",
     dag=dag)
 
+delete_raw_tbl_ch = BashOperator(task_id='delete_raw_table_CH',
+    bash_command=f"curl '{clickhouse_conn}?query=DROP+TABLE+userEvents'",
+    dag=dag)
+
 trigger = TriggerDagRunOperator(
     task_id='trigger_dag_rerun', trigger_dag_id=task_name, dag=dag)
 
 
 sensor_file >> check_length >> test_is_empty \
         >> create_raw_tbl_ch >> insert_raw_data_ch \
-        >> trigger
+        >> delete_raw_tbl_ch >> trigger
