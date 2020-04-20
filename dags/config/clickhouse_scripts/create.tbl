@@ -1,0 +1,22 @@
+CREATE TABLE UserEvents(
+    date             Date,
+    ts               DateTime,
+    userId           UInt8,
+    sessionId        UInt8,
+    page             String,
+    auth             String,
+    method           String,
+    status           UInt8,
+    level            String,
+    itemId           UInt16,
+    city             String,
+    state            String,
+    userAgent        String,
+    lastName         String,
+    firstName        String,
+    registration     UInt64,
+    gender           String,
+    artist           String,
+    song             String,
+    length           Float32
+) ENGINE = MergeTree() PARTITION BY toYYYYMM(date) ORDER BY (intHash32(userId), date, intHash32(sessionId)) SAMPLE BY intHash32(UserID);

@@ -36,9 +36,8 @@ services:
             - EXECUTOR=Celery
         volumes:
             - ./dags:/usr/local/airflow/dags
-            - ./requirements.txt:/requirements.txt
-            - ./plugins:/usr/local/airflow/plugins
             - ./data:/usr/local/airflow/data
+            - ./plugins:/usr/local/airflow/plugins
         ports:
             - "8080:8080"
         command: webserver
@@ -66,9 +65,8 @@ services:
             - webserver
         volumes:
             - ./dags:/usr/local/airflow/dags
-            - ./requirements.txt:/requirements.txt
-            - ./plugins:/usr/local/airflow/plugins
             - ./data:/usr/local/airflow/data
+            - ./plugins:/usr/local/airflow/plugins
         environment:
             - LOAD_EX=n
             - FERNET_KEY=46BKJoQYlPPOexq0OhDZnIlNepKFf87WFwLbfzqDDho=
@@ -82,29 +80,17 @@ services:
             - scheduler
         volumes:
             - ./dags:/usr/local/airflow/dags
-            - ./requirements.txt:/requirements.txt
-            - ./plugins:/usr/local/airflow/plugins
             - ./data:/usr/local/airflow/data
+            - ./plugins:/usr/local/airflow/plugins
         environment:
             - FERNET_KEY=46BKJoQYlPPOexq0OhDZnIlNepKFf87WFwLbfzqDDho=
             - EXECUTOR=Celery
         command: worker
 
     spark-master:
-        image: bde2020/spark-master:2.4.5-hadoop2.7
-        container_name: spark-master
-        ports:
-          - "9090:9090"
-          - "7077:7077"
-        environment:
-          - "constraint:node==<yourmasternode>"
-    spark-worker:
-        image: bde2020/spark-worker:2.4.5-hadoop2.7
-        container_name: spark-worker-1
+        image: dmitryb/clickhouse-spark-connector:0.0.1
+        container_name: spark-connector
         depends_on:
-          - spark-master
-        ports:
-          - "9091:9091"
-        environment:
-          - "SPARK_MASTER=spark://spark-master:7077"
-          - "constraint:node==<yourworkernode>"
+          - worker
+        volumes:
+            - ./dags/config/spark_scripts:/data
