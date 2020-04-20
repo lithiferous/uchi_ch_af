@@ -93,4 +93,5 @@ services:
         depends_on:
           - worker
         volumes:
-            - ./dags/config/spark_scripts:/data
+            - ./dags/config/spark_scripts:/spark_scripts
+            - ./data:/data

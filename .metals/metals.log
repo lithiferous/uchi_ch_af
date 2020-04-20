@@ -1,0 +1,6 @@
+INFO  started: Metals version 0.8.4 in workspace '/home/bane/projects/uchi'
+INFO  time: initialize in 0.28s
+WARN  no build tool detected in workspace '/home/bane/projects/uchi'. The most common cause for this problem is that the editor was opened in the wrong working directory, for example if you use sbt then the workspace directory should contain build.sbt. 
+WARN  no build target for: /home/bane/projects/uchi/dags/config/spark_scripts/process_data.scala
+INFO  no build target: using presentation compiler with only scala-library
+WARN  no build target for: /home/bane/projects/uchi/dags/config/spark_scripts/process_data.scala
