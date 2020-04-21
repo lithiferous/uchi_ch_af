@@ -1,6 +1,10 @@
 {
-	"example_variables_config": {
+	"file_config": {
 		"sourcePath": "/data/",
 		"filePattern": "event-data.json"
+	},
+	"spark_script": {
+		"sourcePath": "/dags/config/spark_scripts/",
+		"filePattern": "process_data.scala"
 	}
 }

@@ -48,4 +48,4 @@ val _df = df.filter($"userId"!=="")
                     df("song").cast(StringType),
                     df("length").cast(FloatType))
 
-_df.write.parquet("/data/event-data.pq")
+_df.repartition(1).write.parquet("/data/event-data.pq")

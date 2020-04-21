@@ -86,12 +86,3 @@ services:
             - FERNET_KEY=46BKJoQYlPPOexq0OhDZnIlNepKFf87WFwLbfzqDDho=
             - EXECUTOR=Celery
         command: worker
-
-    spark-master:
-        image: dmitryb/clickhouse-spark-connector:0.0.1
-        container_name: spark-connector
-        depends_on:
-          - worker
-        volumes:
-            - ./dags/config/spark_scripts:/spark_scripts
-            - ./data:/data
